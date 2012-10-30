@@ -9,8 +9,12 @@ WANT_PROFILING=true
 PROFILER_OF_CHOICE=gprof
 
 # Perform extra sanity checking?
-# Set this variable to true if you wish the codes to perform extra sanity checking (to the possible detriment of performance).
+# Set this variable to true if you wish the codes to perform extra sanity checking (to the detriment of performance).
 WANT_EXTRA_SANITY_CHECKING=false
+
+# Implicitly trust the validity of DNA handed to us?
+# Set this variable to true if you wish the codes to validate the DNA (to the detriment of performance).
+WANT_DNA_VALIDATION=false
 
 # Compile with debugging symbols?
 # Set this variable to true if you wish the codes to be built with debugging symbols (increases code size and does not always produce accurate stepping in a debugger when optimization is turned on).
@@ -36,6 +40,13 @@ DEFINE_KHMER_EXTRA_SANITY_CHECKS=-DKHMER_EXTRA_SANITY_CHECKS
 CXXFLAGS+= $(DEFINE_KHMER_EXTRA_SANITY_CHECKS)
 else
 DEFINE_KHMER_EXTRA_SANITY_CHECKS=
+endif
+
+ifeq ($(WANT_DNA_VALIDATION), true)
+DEFINE_KHMER_VALIDATE_DNA=-DKHMER_VALIDATE_DNA
+CXXFLAGS+= $(DEFINE_KHMER_VALIDATE_DNA)
+else
+DEFINE_KHMER_VALIDATE_DNA=
 endif
 
 ifeq ($(WANT_PROFILING), true)

@@ -31,11 +31,13 @@ bool Hashtable::check_read(const std::string &read) const
     return false;
   }
 
+#ifdef KHMER_VALIDATE_DNA
   for (unsigned int i = 0; i < read.length(); i++)  {
     if (!is_valid_dna(read[i])) {
       return false;
     }
   }
+#endif
 
   return true;
 }
