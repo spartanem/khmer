@@ -7,10 +7,11 @@ DYLIB_EXT=.dylib
 Z_LIB_DIR=zlib-1.2.3
 Z_LIB_FILES=$(Z_LIB_DIR)/*.o
 
-all: zlib parsers.o ktable.o hashtable.o hashbits.o subset.o counting.o
+all: zlib parsers.o ktable.o hashtable.o hashbits.o subset.o counting.o test-HashTables
 
 clean:
 	rm -f *.o $(Z_LIB_DIR)/*.o $(Z_LIB_DIR)/libz$(SO_EXT).1.2.3$(DYLIB_EXT)
+	rm -f test-Hashtables
 
 #test: test.cc ktable.o hashtable.o
 
@@ -18,6 +19,9 @@ zlib: $(Z_LIB_DIR)/libz$(SO_EXT).1.2.3$(DYLIB_EXT)
 
 $(Z_LIB_DIR)/libz$(SO_EXT).1.2.3$(DYLIB_EXT):
 	cd $(Z_LIB_DIR); ./configure --shared; make; rm minigzip.o; rm example.o
+
+test-HashTables: test-HashTables.o counting.o hashtable.o ktable.o parsers.o 
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(Z_LIB_FILES)
 
 parsetest: parsers.o 
 	$(CXX) -o parsers parsers.o $(Z_LIB_FILES)
@@ -36,8 +40,6 @@ parsers.o: parsers.cc parsers.hh
 ktable.o: ktable.cc ktable.hh
 
 hashtable.o: hashtable.cc hashtable.hh ktable.hh khmer.hh
-
-intertable.o: intertable.cc intertable.hh ktable.hh khmer.hh
 
 hashbits.o: hashbits.cc hashbits.hh subset.hh hashtable.hh ktable.hh khmer.hh counting.hh
 
